@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="pnfs-client" default="jar" basedir=".">
+
+	<property name="project.home" value="." />
+
+	<property name="src.dir" value="${project.home}/src" />
+	<property name="lib.dir" value="${project.home}/lib" />
+
+	<property name="classes.dir" value="${project.home}/classes" />
+
+	<property name="pnfs.version" value="0.2" />
+	<property name="pnfs.jar" value="pnfs-${pnfs.version}.jar" />
+
+	<path id="compile.classpath">
+		<fileset dir="${lib.dir}" includes="*.jar"/>
+	</path>
+	
+	<target name="compile" depends="clean">
+		<mkdir dir="${classes.dir}"/>
+		<javac srcdir="src"
+		       destdir="${classes.dir}"
+			   debug="false"
+		       deprecation="false"
+		       optimize="true"
+		       source="1.5"
+		       encoding="UTF-8"
+		       classpathref="compile.classpath">
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<copy todir="${classes.dir}">
+			<fileset dir="${src.dir}" includes="**/*.properties"/>
+		</copy>
+		<jar destfile="${pnfs.jar}">
+			<fileset dir="${classes.dir}">
+				<include name="**/*.class" />
+				<include name="**/*.properties" />
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="deploy" depends="jar">
+		<copy file="${pnfs.jar}" tofile="../painiu/lib/painiu/${pnfs.jar}" />
+		<copy file="${pnfs.jar}" tofile="../painiu/web/WEB-INF/lib/${pnfs.jar}" />
+	</target>
+
+	<target name="clean">
+		<delete file="${pnfs.jar}" />
+		<delete dir="${classes.dir}" />
+	</target>
+</project>
