@@ -27,13 +27,10 @@ class Photo(Model):
 	STATE_ACTIVE = 0
 	STATE_DISABLED = 1
 	
-	#VERSIONS = ('square', 'thumb', 'small', 'medium', 'big', 'large')
-	#SIZES = (50, 90, 150, 300, 800, 1024)
-	
-	VERSIONS = ('square', 'thumb', 'small', 'daogou', 'smedium', 'medium', 'big', 'large', 'thumb50', 'thumb100', 'thumb120')
-	SIZES = (50, 90, 150, 198, 208, 300, 800, 1024, 50, 100, 120)
+	VERSIONS = ('square', 'thumb', 'small', 'medium', 'big', 'large')
+	SIZES = (50, 90, 150, 300, 800, 1024)
 
-	SIZE_MAPPING = {}
+    SIZE_MAPPING = {}
 	THUMB_FLAGS = {}
 	for i in xrange(len(VERSIONS)):
 		SIZE_MAPPING[VERSIONS[i]] = SIZES[i]
