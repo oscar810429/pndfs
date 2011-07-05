@@ -30,7 +30,7 @@ class Photo(Model):
 	VERSIONS = ('square', 'thumb', 'small', 'medium', 'big', 'large')
 	SIZES = (50, 90, 150, 300, 800, 1024)
 
-	SIZE_MAPPING = {}
+    SIZE_MAPPING = {}
 	THUMB_FLAGS = {}
 	for i in xrange(len(VERSIONS)):
 		SIZE_MAPPING[VERSIONS[i]] = SIZES[i]
