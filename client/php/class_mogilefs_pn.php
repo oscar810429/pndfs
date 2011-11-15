@@ -1,4 +1,4 @@
-<?
+<?php
 class MogileFSClass{
     var $socket;
     var $error;
@@ -79,10 +79,9 @@ class MogileFSClass{
     function doRequest( $cmd,$args=array() )
     {
         $params=' class='.urlencode($this->domain);
-
         foreach ($args as $key => $value)
             $params.='&'.urlencode($key)."=".urlencode(iconv('gbk','utf-8',$value));
-
+            
         if ( ! $this->socket ) {
             $this->connect();
         }
@@ -149,8 +148,7 @@ class MogileFSClass{
      */
     function saveFile( $username = null, $filename = null)
     {
-        $res = $this->doRequest( "CREATE_OPEN", array("username"=>$username,'filename'=>''));
-        print_r($res);
+        $res = $this->doRequest( "CREATE_OPEN", array("username"=>$username,'filename'=>$filename));
 
         if ( ! $res )
             return false;
@@ -159,8 +157,6 @@ class MogileFSClass{
             $host = $matches[1];
             $port = $matches[2];
             $path = $matches[3];
-
-            // $fout = fopen( $res['path'], 'w' );
 
             $fin = fopen( $filename, 'r' );
             $ch = curl_init();
@@ -177,6 +173,8 @@ class MogileFSClass{
                 return false;
             }
             curl_close($ch);
+            
+            list($width, $height) = getimagesize($filename);
 
             $closeres = $this->doRequest( "CREATE_CLOSE", array(
                 "class" => $this->domain,
@@ -187,16 +185,15 @@ class MogileFSClass{
                 "filename"=> $res['filename'],
                 "username"=> $res['username'],
                 "secret" => $res['secret'],
-                "width" => "720",
-                "height" => "480",
+                "width" => $width,
+                "height" => $height,
                 "content_type"=> "image/jpeg"
                 ));
-  
-  
-            if ($closeres===false) {
-                return false;
+            
+            if ( strlen($this->error)==4 ) {
+                return $res;
             } else {
-                return true;
+                return false;
             }
         }
     }
